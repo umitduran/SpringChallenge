@@ -1,19 +1,22 @@
 package com.example.demo.api;
 
-import com.example.demo.domain.customer.CustomerRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.demo.domain.customer.CustomerService;
+import com.example.demo.dto.CustomerViewDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "api/customers")
+@RequestMapping(value = "/api")
+@RequiredArgsConstructor
 public class CustomerController {
 
-    private CustomerRepository customerRepository;
+    private final CustomerService customerService;
 
-    @GetMapping
-    public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return String.format("Hello %s!", name);
+
+    @GetMapping("customer/{id}")
+    public ResponseEntity<CustomerViewDTO> getCustomerById(@PathVariable("id") Long id) {
+        final CustomerViewDTO customerViewDTO = customerService.getCustomerById(id);
+        return ResponseEntity.ok(customerViewDTO);
     }
 }
